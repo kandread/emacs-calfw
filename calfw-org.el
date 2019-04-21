@@ -62,6 +62,9 @@
   "Default arguments for collecting agenda entries.
 If value is nil, `org-agenda-entry-types' is used.")
 
+(defvar cfw:org-agenda-skip-function nil
+  "Function to be called when collecting agenda items.")
+
 (defvar cfw:org-icalendars nil
   "Org buffers for exporting icalendars.
 Setting a list of the custom agenda files, one can use the
@@ -100,9 +103,10 @@ For example,
                 append
                 (progn
                   (org-check-agenda-file file)
-                  (apply 'org-agenda-get-day-entries
-                         file date
-                         cfw:org-agenda-schedule-args))))))
+		  (let ((org-agenda-skip-function cfw:org-agenda-skip-function))
+		    (apply 'org-agenda-get-day-entries
+			   file date
+			   cfw:org-agenda-schedule-args)))))))
 
 (defun cfw:org-onclick ()
   "Jump to the clicked org item."
